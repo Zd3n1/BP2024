@@ -1,0 +1,45 @@
+### Login wrong username
+
+POST http://localhost:4000/user/login
+content-type: application/json
+
+{
+  "username": "user",
+    "password": "pw"
+}
+
+
+### Login wrong password
+
+POST http://localhost:4000/user/login
+content-type: application/json
+
+{
+  "username": "Honza",
+  "password": "pfiejisus"
+}
+
+
+
+### Login2
+
+POST http://localhost:4000/user/login
+content-type: application/json
+
+{
+  "username": "Eliska",
+  "password": "heslo"
+}
+
+
+### Login Admin
+
+POST http://localhost:4000/user/login
+content-type: application/json
+
+{
+  "username": "Admin",
+  "password": "pw"
+}
+
+
