@@ -62,16 +62,29 @@ class UserService {
     }
   }
 
+  async delete(id) {
+    try {
+      const result = await database().run(
+          "DELETE FROM users WHERE user_id = ?",
+          id
+      );
+      return result.changes > 0;
+    } catch (error) {
+      console.error("Failed to delete user:", error);
+      throw error;
+    }
+  }
 
-  // async AddScore(user_id, score) {
-  //   try{
-  //     const result = await database().run("UPDATE users SET score = score + ? WHERE user_id = ?", [score, user_id]);
-  //     return result;
-  //   }catch (e) {
-  //       console.error("Database error in AddScore:", e);
-  //       throw e;
-  //   }
-  // }
+  async create(user) {
+    const result = await database().run(
+        "INSERT INTO users (username, password, role) VALUES (?, ?, ?)",
+        user.username,
+        this.hashPassword(user.password),
+        user.role,
+    );
+    return await this.getAll1();
+  }
+
 
   async AddScore(user_id, score) {
     try {

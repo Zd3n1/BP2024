@@ -8,6 +8,7 @@ const courseService = require("../service/course-service");
 const {isBefore} = require("date-fns");
 const teacherService = require("../service/teacher-service");
 const {passwordConfig} = require("../config");
+const reservationService = require("../service/reservation-service");
 
 
 router.post("/login", async (req, res) => {
@@ -101,6 +102,42 @@ router.post("/:id/:score", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+router.delete("/:id", async (req, res) => {
+  const user_id = req.params.id;
+
+  try {
+    const deletionResult = await userService.delete(user_id);
+
+    if (deletionResult === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({ error: "Failed to delete user" });
+  }
+});
+
+router.post("/", async (req, res) => {
+  const data = req.body;
+  if (
+      data.username === undefined ||
+      data.username.trim() === "" ||
+      data.password === undefined ||
+      data.password.trim() === "" ||
+      data.role === undefined ||
+      data.role.trim() === ""
+  ){
+    res.status(400).send("Bad input");
+    return;
+  }
+
+  const response = await userService.create(data);
+  res.status(201).json(response);
+
 });
 
 
