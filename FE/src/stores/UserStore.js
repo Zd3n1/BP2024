@@ -18,6 +18,7 @@ export const useUserStore = defineStore('user', {
       loginMessage: null,
       afterLoginRoute: null,
       users: [],
+      isUserFormShown: false,
     }
   },
 
@@ -92,7 +93,30 @@ export const useUserStore = defineStore('user', {
         console.error(e);
         this.error = 'Cannot add score!';
       }
-    }
+    },
+
+
+    async delete(id) {
+      try {
+        const response = await fetch(`${config.backendUrl}/user/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (response.ok) {
+          console.log("User deleted successfully");
+          return true;
+        } else {
+          throw new Error('Failed to delete the user');
+        }
+      } catch (error) {
+        console.error("Error deleting user:", error);
+        return false;
+      }
+    },
+
+    async create(data) {
+      await axios.post(config.backendUrl + "/user", data);
+    },
 
   }
 })
