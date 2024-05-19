@@ -94,23 +94,14 @@ export default {
 
   data() {
     return {
-      // sortType: 'Total',
-      // sortOptions: [
-      //   { value: 'Total' },
-      //   { value: 'Score' },
-      //   { value: 'Bonus' }
-      // ],
-
       sortType: 'Total',
       sortOptions: [
         { text: 'Total Score', value: 'Total' },
         { text: 'Score', value: 'Score' },
         { text: 'Bonus', value: 'Bonus' }
       ],
-
     };
   },
-
 
   components: {
     Error,
@@ -125,24 +116,30 @@ export default {
 
   computed: {
     ...mapStores(useUserStore),
+
+    filteredUsers() {
+      return this.userStore.users.filter(user => user.role === "student");
+    },
+
     maxTotal() {
-      return Math.max(...this.userStore.users.map(user => user.score + user.bonus));
+      return Math.max(...this.filteredUsers.map(user => user.score + user.bonus));
     },
     maxScore() {
-      return Math.max(...this.userStore.users.map(user => user.score));
+      return Math.max(...this.filteredUsers.map(user => user.score));
     },
     maxBonus() {
-      return Math.max(...this.userStore.users.map(user => user.bonus));
+      return Math.max(...this.filteredUsers.map(user => user.bonus));
     },
+
     sortedUsers() {
       switch (this.sortType) {
         case 'Score':
-          return [...this.userStore.users].sort((a, b) => b.score - a.score);
+          return [...this.filteredUsers].sort((a, b) => b.score - a.score);
         case 'Bonus':
-          return [...this.userStore.users].sort((a, b) => b.bonus - a.bonus);
+          return [...this.filteredUsers].sort((a, b) => b.bonus - a.bonus);
         case 'Total':
         default:
-          return [...this.userStore.users].sort((a, b) => (b.score + b.bonus) - (a.score + a.bonus));
+          return [...this.filteredUsers].sort((a, b) => (b.score + b.bonus) - (a.score + a.bonus));
       }
     }
   },
