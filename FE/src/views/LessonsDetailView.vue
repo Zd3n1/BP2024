@@ -27,11 +27,21 @@
 
     <v-container>
 
-<!--      <v-card>-->
-<!--        <v-card-title>-->
-<!--          {{ userStore.user.id }}-->
-<!--        </v-card-title>-->
-<!--      </v-card>-->
+      <v-card>
+        <v-card-title>
+              {{ userStore.user }}
+        </v-card-title>
+      </v-card>
+
+<!--            <v-card>-->
+<!--              <v-card-title>-->
+<!--                {{ userStore.user.username }}-->
+<!--                {{ userStore.user.role }}-->
+<!--                {{ theoCourse }}-->
+<!--                -->
+<!--                {{ userStore.user_id}}-->
+<!--              </v-card-title>-->
+<!--            </v-card>-->
 
       <v-row align="center" justify="center">
         <v-col cols="12" sm="10" md="10">
@@ -257,9 +267,23 @@ export default {
       }
     },
     submitAnswers() {
+      const theoCourse = this.userStore.user.theoretical_course;
       const userId = this.userStore.user.id;
-      this.userStore.addScore(userId, this.correctAnswersCount*10);  //doesnt work without userId
-      this.$router.push("/leaderboard");
+
+      if (theoCourse === 0) {
+        this.userStore.addScore(userId, this.correctAnswersCount*10);  //doesnt work without userId
+        this.userStore.theoretical(userId)
+        this.$router.push("/leaderboard");
+      } else {
+        this.userStore.addScore(userId, 0);  //doesnt work without userId
+        this.userStore.theoretical(userId)
+        this.$router.push("/leaderboard");
+      }
+
+
+      // const userId = this.userStore.user.id;
+      // this.userStore.addScore(userId, this.correctAnswersCount*10);  //doesnt work without userId
+      // this.$router.push("/leaderboard");
 
     },
 
@@ -277,6 +301,7 @@ export default {
       this.answeredQuestions[quizIndex] = true;
       this.disableOptions(quizIndex);
     },
+
 
     getOptionColor(quizIndex, optionIndex) {
       const selected = this.selectedOptions[quizIndex];

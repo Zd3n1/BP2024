@@ -39,6 +39,19 @@ class ReservationService {
     }
   }
 
+  async deletedUser(id) {
+    try {
+      const result = await database().run(
+          "DELETE FROM reservations WHERE user_id = ?",
+          id
+      );
+      return result.changes > 0;
+    } catch (error) {
+      console.error("Failed to delete users reservations:", error);
+      throw error;
+    }
+  }
+
   // async getUsername(user_id) {
   //   const result = await db.get("SELECT username FROM users WHERE user_id = ?", [user_id]);
   //   return result ? result.username : null;

@@ -120,20 +120,48 @@ export const useUserStore = defineStore('user', {
     },
 
 
+    // async delete(id) {
+    //   try {
+    //     const response = await fetch(`${config.backendUrl}/user/${id}`, {
+    //       method: 'DELETE'
+    //     });
+    //
+    //     if (response.ok) {
+    //       console.log("User deleted successfully");
+    //       return true;
+    //     } else {
+    //       throw new Error('Failed to delete the user');
+    //     }
+    //   } catch (error) {
+    //     console.error("Error deleting user:", error);
+    //     return false;
+    //   }
+    // },
+
+
     async delete(id) {
       try {
+
         const response = await fetch(`${config.backendUrl}/user/${id}`, {
           method: 'DELETE'
         });
 
-        if (response.ok) {
-          console.log("User deleted successfully");
-          return true;
-        } else {
-          throw new Error('Failed to delete the user');
+        if (!response.ok) {
+          throw new Error('Failed to delete the reservation');
         }
+
+        const response1 = await fetch(`${config.backendUrl}/reservation/yeetUser/${id}`, {
+          method: 'DELETE'
+        });
+
+        if (!response1.ok) {
+          throw new Error('Failed to delete the user\'s reservations');
+        }
+
+        console.log("Reservation and user's reservations deleted successfully");
+        return true;
       } catch (error) {
-        console.error("Error deleting user:", error);
+        console.error("Error deleting reservation or user's reservations:", error);
         return false;
       }
     },
@@ -141,6 +169,10 @@ export const useUserStore = defineStore('user', {
     async create(data) {
       await axios.post(config.backendUrl + "/user", data);
     },
+
+
+
+
 
   }
 })
