@@ -31,7 +31,7 @@
 
 
   <v-row v-else>
-    <v-col cols="3" v-for="user in userStore.users" :key="user.user_id">
+    <v-col cols="3" v-for="user in filteredUsers" :key="user.user_id">
       <v-card>
         <v-card-header>
           <v-card-title>{{ user.username }}</v-card-title>
@@ -77,6 +77,10 @@ export default {
 
   computed: {
     ...mapStores(useUserStore),
+
+    filteredUsers() {
+      return this.userStore.users.filter(user => user.role === "student" || user.role === "teacher");
+    },
   },
 
   methods: {

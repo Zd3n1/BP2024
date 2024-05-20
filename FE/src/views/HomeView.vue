@@ -229,8 +229,12 @@ export default {
   computed: {
 
     ...mapStores(useUserStore, useReservationStore),
+    filteredUsers() {
+      return this.userStore.users.filter(user => user.role === "student");
+    },
+
     maxTotal() {
-      return Math.max(...this.userStore.users.map(user => user.score + user.bonus));
+      return Math.max(...this.filteredUsers.map(user => user.score + user.bonus));
     },
 
     sortedUsers() {

@@ -71,8 +71,17 @@
 <!--              <v-btn color="error" @click="cancelEdit">Cancel</v-btn>-->
 <!--            </div>-->
             <div class="align-container">
-              <v-btn class="margin-right" color="primary" @click="editReservation(reservation)">Edit</v-btn>
-              <v-btn color="error" @click="deleteReservation(reservation.reservation_id)">Delete</v-btn>
+<!--              <v-btn class="margin-right" color="primary" @click="editReservation(reservation)">Edit</v-btn>-->
+              <v-btn
+                  color="error"
+                  @click="deleteReservation(reservation.reservation_id)"
+                  :disabled="reservation.user_id !== userStore.user.id &&
+                  (userStore.user.role !== 'admin' && userStore.user.role !== 'teacher')"
+              >
+
+                Delete
+              </v-btn>
+
 <!--              <v-btn color="error" @click="dialog = true">Delete</v-btn>-->
             </div>
 
@@ -132,6 +141,7 @@ export default {
   },
   created() {
     this.reservationStore.loadAll();
+    this.reservationStore.isReservationFormShown = false;
   },
   computed: {
     ...mapStores(useUserStore, useReservationStore),
@@ -154,6 +164,7 @@ export default {
       this.reservationStore.create(reservationFormatted);
       this.reservationStore.reservations.push(reservationFormatted);
       this.reservationStore.isReservationFormShown = false;
+      this.reservationStore.loadAll();
     },
     // deleteReservation(id){
     //   this.reservationStore.delete(id);
