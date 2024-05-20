@@ -27,6 +27,7 @@ export const useUserStore = defineStore('user', {
     isAuthenticated: state => state.token !== null,
     user: state => jwtDecode(state.token),
     user_id: state => jwtDecode(state.token).id,
+    theoretical_course: state => jwtDecode(state.token).theoretical_course,
   },
 
   actions: {
@@ -94,6 +95,17 @@ export const useUserStore = defineStore('user', {
         console.error(e);
         this.error = 'Cannot add score!';
       }
+    },
+
+    async theoretical(user_id) {
+        try {
+            const response = await axios.post(`${config.backendUrl}/user//theoretical/course/${user_id}`);
+            console.log(response);
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            this.error = 'Cannot add theoretical!';
+        }
     },
 
     async addBonus(user_id, bonus) {

@@ -106,6 +106,21 @@ router.post("/:id/:score", async (req, res) => {
   }
 });
 
+router.post("/theoretical/course/:id", async (req, res) => {
+    const userId = req.params.id;
+
+    try {
+        const result = await userService.theoretical(userId);
+        if (result && result.affectedRows === 0) {
+        return res.status(404).json({ error: "User not found" });
+        }
+        console.log("Theoretical added");
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
+});
+
 router.post("/:id/bonus/:bonus", async (req, res) => {
     const userId = req.params.id;
     const bonus = parseInt(req.params.bonus, 10);

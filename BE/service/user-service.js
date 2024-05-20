@@ -26,6 +26,7 @@ class UserService {
       id: user.user_id,
       username: user.username,
       role: user.role,
+      theoretical_course: user.theoretical_course,
     };
     return jwt.sign(tokenPayload, jwtConfig.secret, {
       algorithm: jwtConfig.algorithms[0],
@@ -92,6 +93,16 @@ class UserService {
       return result;
     } catch (e) {
       console.error("Database error in AddScore:", e);
+      throw e;
+    }
+  }
+
+  async theoretical(user_id) {
+    try {
+      const result = await database().run("UPDATE users SET theoretical_course = users.theoretical_course + 1 WHERE user_id = ?", [user_id]);
+      return result;
+    } catch (e) {
+      console.error("Database error in theoretical:", e);
       throw e;
     }
   }
