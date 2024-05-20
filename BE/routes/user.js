@@ -55,6 +55,8 @@ const ORDER = {
   ROLE: "role",
 };
 
+//not useed
+
 router.get("/", async (req, res) => {
   const order = req.query.order;
 
@@ -102,6 +104,26 @@ router.post("/:id/:score", async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
+});
+
+router.post("/:id/bonus/:bonus", async (req, res) => {
+    const userId = req.params.id;
+    const bonus = parseInt(req.params.bonus, 10);
+
+    if (isNaN(bonus)) {
+        return res.status(400).json({ error: "Invalid bonus format" });
+    }
+
+    try {
+        const result = await userService.AddBonus(userId, bonus);
+        if (result && result.affectedRows === 0) {
+        return res.status(404).json({ error: "User not found" });
+        }
+        console.log("Bonus added:", bonus);
+        res.json({ success: true, bonus: bonus });
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error" });
+    }
 });
 
 router.delete("/:id", async (req, res) => {

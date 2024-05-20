@@ -95,6 +95,16 @@ class UserService {
       throw e;
     }
   }
+
+  async AddBonus(user_id, bonus) {
+    try {
+      const result = await database().run("UPDATE users SET bonus = bonus + ? WHERE user_id = ?", [bonus, user_id]);
+      return result;
+    } catch (e) {
+      console.error("Database error in AddBonus:", e);
+      throw e;
+    }
+  }
 }
 
 module.exports = new UserService();
