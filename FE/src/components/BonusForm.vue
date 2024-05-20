@@ -1,51 +1,28 @@
 <template>
   <v-row justify="space-around">
     <v-col cols="4">
-      <v-form v-model="formValid" ref="form">
-        <v-text-field
-          label="Username"
-          type="text"
-          v-model="user.username"
-        />
-<!--        <v-text-field-->
-<!--            label="Password"-->
-<!--            type="text"-->
-<!--            v-model="user.password"-->
-<!--        />-->
-
-
+      <v-form @submit.prevent="submitForm">
         <v-select
-            v-model="user.role"
-            label="Role"
-            :items="['student', 'teacher' , 'admin']"
-        >
-        </v-select>
+            v-model="selectedUsername"
+            label="Username"
+            :items="usernames"
+        ></v-select>
 
-
-
-        <v-form @submit.prevent="submitForm">
-          <v-text-field
-              label="Password"
-              type="password"
-              v-model="user.password"
-              :rules="passwordRules"
-          />
-          <v-text-field
-              label="Confirm Password"
-              type="password"
-              v-model="confirmPassword"
-              :rules="confirmPasswordRules"
-          />
-        </v-form>
+        <v-text-field
+            label="Bonus"
+            type="number"
+            v-model="bonus"
+            :rules="bonusRules"
+        ></v-text-field>
 
         <div class="align-container">
           <v-btn
               color="primary"
-              @click="onClick()"
-              :disabled="!isFormValid">
+              @click="submitForm"
+              :disabled="!isFormValid"
+          >
             Add
           </v-btn>
-          <br>
         </div>
       </v-form>
     </v-col>
@@ -53,72 +30,63 @@
 </template>
 
 <script>
-import { mapStores } from "pinia/dist/pinia";
+import { mapStores } from "pinia";
 import { useUserStore } from "../stores/UserStore";
 
 export default {
-  name: "UserForm",
-
-  props: {
-    text: {
-      type: String,
-      required: true,
-    },
-  },
+  name: "BonusForm",
 
   data() {
     return {
-      formValid: true,
-      user: {
-        username: "",
-        password: "",
-        role: "",
-      },
-      confirmPassword: "",
-      passwordRules: [
-        v => !!v || "Password is required",
-        v => (v && v.length >= 6) || "Password must be at least 6 characters"
-      ],
-      confirmPasswordRules: [
-        v => !!v || "Confirm Password is required",
-        v => this.passwordsMatch || "Passwords must match"
+      selectedUsername: "",
+      bonus: null,
+      bonusRules: [
+        v => !!v || "Bonus is required",
+        v => v >= 0 || "Bonus must be a positive number"
       ]
     };
   },
 
   computed: {
     ...mapStores(useUserStore),
-    passwordsMatch() {
-      return this.user.password === this.confirmPassword;
+
+    filteredUsers() {
+      return this.userStore.users.filter(user => user.role === "student");
+    },
+
+    usernames() {
+      return this.filteredUsers.map(user => user.username);
     },
     isFormValid() {
-      return this.passwordsMatch && this.user.password && this.confirmPassword;
+      return this.selectedUsername && this.bonus !== null && this.bonus >= 0;
     }
+  },
 
-
+  created() {
+    this.userStore.loadAll1();
   },
 
   methods: {
-
     submitForm() {
       if (this.isFormValid) {
-        console.log("Form submitted:", this.user);
+        const user = this.userStore.users.find(user => user.username === this.selectedUsername);
+        this.$emit("add-bonus", {
+          user_id: user.user_id,
+          bonus: this.bonus
+        });
+        console.log("Form submitted:", {
+          user_id: user.user_id,
+          bonus: this.bonus
+        });
       } else {
         console.log("Form validation failed.");
       }
-    },
-
-    onClick() {
-      this.$emit("add", {
-        ...this.user
-      });
     },
   },
 };
 </script>
 
-<style>
-
+<style scoped>
 .align-container {
   display: flex;
   justify-content: flex-end;
@@ -129,7 +97,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  /*height: 45vh;*/
   text-align: center;
 }
 </style>

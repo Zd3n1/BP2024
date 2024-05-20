@@ -19,6 +19,7 @@ export const useUserStore = defineStore('user', {
       afterLoginRoute: null,
       users: [],
       isUserFormShown: false,
+      isBonusFormShown: false,
     }
   },
 
@@ -93,6 +94,17 @@ export const useUserStore = defineStore('user', {
         console.error(e);
         this.error = 'Cannot add score!';
       }
+    },
+
+    async addBonus(user_id, bonus) {
+        try {
+            const response = await axios.post(`${config.backendUrl}/user/${user_id}/bonus/${bonus}`);
+            console.log(response);
+            return response.data;
+        } catch (e) {
+            console.error(e);
+            this.error = 'Cannot add bonus!';
+        }
     },
 
 

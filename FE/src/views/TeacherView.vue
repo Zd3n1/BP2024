@@ -1,7 +1,14 @@
 <template>
   <h1 class="d-flex align-center mb-4">
-  Teacher
+    Teacher
+    <v-spacer />
+    <v-btn color="primary" @click="showForm()">+ Add Bonus</v-btn>
   </h1>
+  <v-spacer />
+  <BonusForm
+      v-if="userStore.isBonusFormShown"
+      @add-bonus="addBonus"
+  />
   <v-spacer />
 
   <error v-if="teacherStore.error" :text="teacherStore.error" @hide="teacherStore.clearError"></error>
@@ -26,36 +33,31 @@
           <v-card-title>{{ user.username }}</v-card-title>
         </v-card-header>
         <v-card-text>
-          User ID: {{ user.user_id }} | Score: {{ user.score }} | Bonus: {{ user.bonus }}
+          Score: {{ user.score }} | Bonus: {{ user.bonus }}
         </v-card-text>
         <v-progress-linear
             color="primary"
             height="20"
-            :model-value= "user.score+user.bonus"
-
+            :model-value="user.score + user.bonus"
         ></v-progress-linear>
-<!--        <v-progress-linear color="primary" :model-value= "user.score" :max="200"></v-progress-linear>-->
-
       </v-card>
     </v-col>
   </v-row>
-
-
 </template>
-
 
 <script>
 import { mapStores } from "pinia";
-import CourseForm from "../components/CourseForm.vue";
 import Error from "../components/Error.vue";
 import { useTeacherStore } from "../stores/TeacherStore";
+import { useUserStore } from "../stores/UserStore";
+import BonusForm from "../components/BonusForm.vue";
 
 export default {
   name: "TeacherView",
 
   components: {
     Error,
-    CourseForm,
+    BonusForm,
   },
 
   created() {
@@ -63,7 +65,7 @@ export default {
   },
 
   computed: {
-    ...mapStores(useTeacherStore),
+    ...mapStores(useTeacherStore, useUserStore),
 
     filteredUsers() {
       return this.teacherStore.users.filter(user => user.role === "student");
@@ -71,9 +73,35 @@ export default {
   },
 
   methods: {
-  },
+    showForm() {
+      this.userStore.isBonusFormShown = true;
+    },
+    hideForm() {
+      this.userStore.isBonusFormShown = false;
+    },
+    addBonus({ user_id, bonus }) {
+      this.userStore.addBonus(user_id, bonus);
+      this.userStore.isBonusFormShown = false;
+      this.teacherStore.loadAll();
+    },
+  }
 };
 </script>
 
+<style scoped>
+.custom-height {
+  height: 80px;
+}
 
-<style scoped></style>
+.card {
+  min-width: 80vw;
+  margin: 10px;
+}
+
+.align-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+</style>

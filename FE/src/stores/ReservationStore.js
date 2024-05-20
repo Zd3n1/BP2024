@@ -143,8 +143,28 @@ export const useReservationStore = defineStore("reservation", {
         return false;
       }
     }
-
-
-
   },
+
+  // async edit(id, data) {
+  //   try {
+  //     const response = await fetch(`${config.backendUrl}/reservation/${id}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify(data)
+  //     });
+  //
+  //     if (response.ok) {
+  //       console.log("Reservation updated successfully");
+  //       return true;
+  //     } else {
+  //       throw new Error('Failed to update the reservation');
+  //     }
+  //   } catch (error) {
+  //     console.error("Error updating reservation:", error);
+  //     return false;
+  //   }
+  // }
+
 });
