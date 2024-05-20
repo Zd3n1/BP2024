@@ -70,8 +70,10 @@
 <!--              <v-btn color="primary" @click="updateReservation(reservation)">Save</v-btn>-->
 <!--              <v-btn color="error" @click="cancelEdit">Cancel</v-btn>-->
 <!--            </div>-->
+
             <div class="align-container">
 <!--              <v-btn class="margin-right" color="primary" @click="editReservation(reservation)">Edit</v-btn>-->
+
               <v-btn
                   color="error"
                   @click="deleteReservation(reservation.reservation_id)"
@@ -184,12 +186,13 @@ export default {
         console.error("Error during deletion or data reload:", error);
       }
     },
+
     handleRadioChange(event) {
       this.reservationStore.isLoading = true;
       this.reservationStore.loadAll(event.target.value);
       this.reservationStore.isLoading = false;
     },
-    // could delete this method
+    // not currently used, could delete this method
 
   },
 };

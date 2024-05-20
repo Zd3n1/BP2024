@@ -50,7 +50,12 @@
 
         <v-text-field label="Description" v-model="reservation.description" />
         <div class="align-container">
-          <v-btn color="primary" @click="onClick()">Add</v-btn>
+
+          <v-btn
+              color="primary"
+              @click="onClick()"
+          :disabled="!formValid"
+          >Add</v-btn>
           <br>
         </div>
       </v-form>
@@ -90,11 +95,15 @@ export default {
       const hours = Math.floor(this.sliderValue / 60);
       const minutes = this.sliderValue % 60;
       return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-    }
+    },
+
+    // isFormValid() {
+    //   return this.description.length > 0 && this.reservation.time.length > 0 && this.reservation.duration.length > 0;
+    // },
   },
 
   watch: {
-    sliderValue(newVal) {
+    sliderValue() {
       this.reservation.duration = this.formattedDuration;
     }
   },

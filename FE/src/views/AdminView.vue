@@ -40,7 +40,9 @@
           Role: {{ user.role }}
           <div class="align-container">
             <!--              <v-btn class="margin-right" color="primary" @click="editUser(user)">Edit</v-btn>-->
-            <v-btn color="error" @click="deleteUser(user.user_id)">Delete</v-btn>
+            <v-btn color="error" @click="deleteUser(user.user_id)"
+                   :disabled="user.user_id === userStore.user_id">Delete</v-btn>
+
 
           </div>
         </v-card-text>
@@ -79,7 +81,7 @@ export default {
     ...mapStores(useUserStore),
 
     filteredUsers() {
-      return this.userStore.users.filter(user => user.role === "student" || user.role === "teacher");
+      return this.userStore.users.filter(user => user.role === "student" || user.role === "teacher" || user.role === "admin");
     },
   },
 

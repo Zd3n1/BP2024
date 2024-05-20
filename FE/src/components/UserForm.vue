@@ -7,26 +7,44 @@
           type="text"
           v-model="user.username"
         />
-        <v-text-field
-            label="Password"
-            type="text"
-            v-model="user.password"
-        />
-        <v-text-field
-            label="Role"
-            type="text"
+<!--        <v-text-field-->
+<!--            label="Password"-->
+<!--            type="text"-->
+<!--            v-model="user.password"-->
+<!--        />-->
+
+
+        <v-select
             v-model="user.role"
-        />
+            label="Role"
+            :items="['student', 'teacher' , 'admin']"
+        >
+        </v-select>
 
 
 
-
-<!--        <v-text-field label="Description" v-model="reservation.description" />-->
-
-
+        <v-form @submit.prevent="submitForm">
+          <v-text-field
+              label="Password"
+              type="password"
+              v-model="user.password"
+              :rules="passwordRules"
+          />
+          <v-text-field
+              label="Confirm Password"
+              type="password"
+              v-model="confirmPassword"
+              :rules="confirmPasswordRules"
+          />
+        </v-form>
 
         <div class="align-container">
-          <v-btn color="primary" @click="onClick()">Add</v-btn>
+          <v-btn
+              color="primary"
+              @click="onClick()"
+              :disabled="!isFormValid">
+            Add
+          </v-btn>
           <br>
         </div>
       </v-form>
@@ -56,14 +74,39 @@ export default {
         password: "",
         role: "",
       },
+      confirmPassword: "",
+      passwordRules: [
+        v => !!v || "Password is required",
+        v => (v && v.length >= 6) || "Password must be at least 6 characters"
+      ],
+      confirmPasswordRules: [
+        v => !!v || "Confirm Password is required",
+        v => this.passwordsMatch || "Passwords must match"
+      ]
     };
   },
 
   computed: {
     ...mapStores(useUserStore),
+    passwordsMatch() {
+      return this.user.password === this.confirmPassword;
+    },
+    isFormValid() {
+      return this.passwordsMatch && this.user.password && this.confirmPassword;
+    }
+
+
   },
 
   methods: {
+
+    submitForm() {
+      if (this.isFormValid) {
+        console.log("Form submitted:", this.user);
+      } else {
+        console.log("Form validation failed.");
+      }
+    },
 
     onClick() {
       this.$emit("add", {

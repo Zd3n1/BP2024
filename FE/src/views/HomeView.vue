@@ -241,14 +241,14 @@ export default {
       let sorted;
       switch (this.sortType) {
         case 'Score':
-          sorted= [...this.userStore.users].sort((a, b) => b.score - a.score);
+          sorted= [...this.filteredUsers].sort((a, b) => b.score - a.score);
           break;
         case 'Bonus':
-          sorted = [...this.userStore.users].sort((a, b) => b.bonus - a.bonus);
+          sorted = [...this.filteredUsers].sort((a, b) => b.bonus - a.bonus);
           break;
         case 'Total':
         default:
-          sorted = [...this.userStore.users].sort((a, b) => (b.score + b.bonus) - (a.score + a.bonus));
+          sorted = [...this.filteredUsers].sort((a, b) => (b.score + b.bonus) - (a.score + a.bonus));
           break;
       }
       return sorted.slice(0, 3);

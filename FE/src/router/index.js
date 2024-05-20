@@ -25,7 +25,11 @@ const router = createRouter({
       component: LoginView,
     },
 
-
+    {
+      path: '/:catchAll(.*)',
+      // redirect: "/login",
+      redirect: "/"
+    },
 
     {
       path: "/auth",

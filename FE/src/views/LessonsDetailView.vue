@@ -257,9 +257,9 @@ export default {
       }
     },
     submitAnswers() {
+      const userId = this.userStore.user.id;
+      this.userStore.addScore(userId, this.correctAnswersCount*10);  //doesnt work without userId
       this.$router.push("/leaderboard");
-      // this.userStore.addScore(this.getID(), this.correctAnswersCount);
-      this.userStore.addScore(6, this.correctAnswersCount);
 
     },
 
