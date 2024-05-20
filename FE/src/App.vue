@@ -8,13 +8,25 @@
         </router-link>
       </v-app-bar-title>
 
+<!--      {{ userStore.user }}-->
+<!--      {{ UserRole }}-->
+
       <v-btn :to="{ name: 'home' }">Home</v-btn>
       <v-btn :to="{ name: 'reservations' }">Reservations</v-btn>
       <v-btn :to="{ name: 'lesson' }">Lessons</v-btn>
 <!--      <v-btn :to="{ name: 'courses' }">Courses</v-btn>-->
       <v-btn :to="{ name: 'leaderboard' }">Leaderboard</v-btn>
-      <v-btn :to="{ name: 'teacher' }">Teacher</v-btn>
-      <v-btn :to="{ name: 'admin' }">Admin</v-btn>
+
+
+
+
+
+            <v-btn v-if="UserRole === 'teacher' " :to="{ name: 'teacher' }">Teacher</v-btn>
+            <v-btn v-show="UserRole === 'admin' " :to="{ name: 'admin' }">Admin</v-btn>
+
+<!--            <v-btn :to="{ name: 'teacher' }">Teacher</v-btn>-->
+<!--            <v-btn :to="{ name: 'admin' }">Admin</v-btn>-->
+
 
 <!--      <v-btn :to="{ name: 'printer' }">Tiskárna</v-btn>-->
 
@@ -33,6 +45,7 @@
             </v-list-item-title>
 
             <v-chip text>{{ userStore.user.role }}</v-chip>
+<!--            <v-chip text>{{ this.userStore.user.theoretical }}</v-chip>-->
 <!--            <v-chip text>{{ userStore.user.id }}</v-chip>-->
 
 <!--            <v-chip color="green" text>{{ userStore.user.role }}</v-chip>-->
@@ -62,7 +75,6 @@
         <v-dialog v-model="dialog" persistent max-width="290">
           <v-card>
             <v-card-title class="text-h5">Emergency Stop</v-card-title>
-<!--            <v-card-text>Are you sure you want to perform an emergency stop?</v-card-text>-->
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn color="primary" text @click="dialog = false">Cancel</v-btn>
@@ -118,6 +130,11 @@ export default {
       if (this.printerData.state.flags.operational) return 'green';
       return 'grey';
     },
+    UserRole() {
+      if (this.userStore.isAuthenticated) {
+        return this.userStore.user.role;
+      }
+    },
   },
 
   mounted() {
@@ -127,7 +144,6 @@ export default {
 
   methods: {
     async login() {
-      // await this.UserStore.login('user', 'pw')
       this.$router.push({ name: "login" });
       this.userMenuShown = false;
     },
