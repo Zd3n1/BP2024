@@ -12,36 +12,12 @@ export const useReservationStore = defineStore("reservation", {
 
   actions: {
 
-    // async loadAll(order) {
-    //   this.isLoading = true;
-    //   try {
-    //     const response = await axios.get(
-    //         `${config.backendUrl}/reservation${order ? `?order=${order}` : ""}`
-    //     );
-    //     const reservations = response.data;
-    //     const reservationPromises = reservations.map(async (reservation) => {
-    //       try {
-    //         const usernameResponse = await axios.get(`${config.backendUrl}/user/${reservation.user_id}/username`);
-    //         return {...reservation, username: usernameResponse.data.username || "Unknown User"};
-    //       } catch (error) {
-    //         console.error("Error fetching username for user ID:", reservation.user_id, error);
-    //         return {...reservation, username: "Unknown User"};
-    //       }
-    //     });
-    //
-    //     this.reservations = await Promise.all(reservationPromises);
-    //     this.error = null;
-    //   } catch (error) {
-    //     console.error("Failed to load reservations:", error);
-    //     this.error = "Cannot download reservations!";
-    //   }
-    //   this.isLoading = false;
-    // },
-
-    async loadAll() {
+    async loadAll(order) {
       this.isLoading = true;
       try {
-        const response = await axios.get(`${config.backendUrl}/reservation`);
+        const response = await axios.get(
+            `${config.backendUrl}/reservation${order ? `?order=${order}` : ""}`
+        );
         const reservations = response.data;
         const reservationPromises = reservations.map(async (reservation) => {
           try {
@@ -61,6 +37,30 @@ export const useReservationStore = defineStore("reservation", {
       }
       this.isLoading = false;
     },
+
+    // async loadAll() {
+    //   this.isLoading = true;
+    //   try {
+    //     const response = await axios.get(`${config.backendUrl}/reservation`);
+    //     const reservations = response.data;
+    //     const reservationPromises = reservations.map(async (reservation) => {
+    //       try {
+    //         const usernameResponse = await axios.get(`${config.backendUrl}/user/${reservation.user_id}/username`);
+    //         return {...reservation, username: usernameResponse.data.username || "Unknown User"};
+    //       } catch (error) {
+    //         console.error("Error fetching username for user ID:", reservation.user_id, error);
+    //         return {...reservation, username: "Unknown User"};
+    //       }
+    //     });
+    //
+    //     this.reservations = await Promise.all(reservationPromises);
+    //     this.error = null;
+    //   } catch (error) {
+    //     console.error("Failed to load reservations:", error);
+    //     this.error = "Cannot download reservations!";
+    //   }
+    //   this.isLoading = false;
+    // },
 
 
 

@@ -7,18 +7,24 @@
 
 
   <div v-else>
-    <v-form v-model="formValid" lazy-validation ref="form">
-      <v-text-field
-        v-model="username"
-        label="Username"
-        :rules="usernameRules"
-        ></v-text-field>
-      <v-text-field
-        v-model="password"
-        label="Password"
-      ></v-text-field>
-      <v-btn @click="login()" color="primary">Log me in</v-btn>
-    </v-form>
+    <br>
+    <v-row justify="center">
+      <v-col cols="12" md="6">
+        <v-form v-model="formValid" lazy-validation ref="form">
+          <v-text-field
+              v-model="username"
+              label="Username"
+              :rules="usernameRules"
+          ></v-text-field>
+          <v-text-field
+              v-model="password"
+              label="Password"
+              type="password"
+          ></v-text-field>
+          <v-btn @click="login" color="primary">Log me in</v-btn>
+        </v-form>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

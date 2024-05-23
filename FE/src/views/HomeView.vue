@@ -391,6 +391,9 @@ export default {
             console.error("Error fetching printer status:");
           });
     }
+
+
+
   },
 
   mounted () {

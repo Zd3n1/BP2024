@@ -27,11 +27,11 @@
 
     <v-container>
 
-      <v-card>
-        <v-card-title>
-              {{ userStore.user }}
-        </v-card-title>
-      </v-card>
+<!--      <v-card>-->
+<!--        <v-card-title>-->
+<!--              {{ userStore.user }}-->
+<!--        </v-card-title>-->
+<!--      </v-card>-->
 
 <!--            <v-card>-->
 <!--              <v-card-title>-->
@@ -85,7 +85,8 @@
 
 <!--          just one quizz-->
           <v-card v-if="currentQuizIndex < quizzes.length" :key="currentQuizIndex" class="mb-5">
-            <v-card-title>{{ quizzes[currentQuizIndex].question }}</v-card-title>
+            <v-card-title style="white-space: normal;">
+              {{ quizzes[currentQuizIndex].question }}</v-card-title>
             <br>
             <v-card-text>
               <v-btn
@@ -103,6 +104,9 @@
           </v-card>
         </v-col>
       </v-row>
+
+
+
 
       <v-col>
 
@@ -135,7 +139,14 @@
               :disabled="currentQuizIndex === quizzes.length-1"
           >Next</v-btn>
 
+
         </div>
+
+
+
+
+
+
       </v-col>
     </v-container>
 
@@ -143,12 +154,20 @@
 
 
     <div class="text-center">
+      <v-row align="center" justify="center">
+      <v-col cols="12" sm="3" md="3">
 
-      Correct Answers: {{ correctAnswersCount }} / {{ quizzes.length }}
-      Correct: {{ correct }}%
+      <v-card>
+        Answers: {{ AnswersCount }} / {{ quizzes.length }}  <br>
+        Correct Answers: {{ correctAnswersCount }} / {{ quizzes.length }} <br>
+        Lesson progress: {{ progress }}% <br>
+        Correct: {{ correct }}%
+      </v-card>
 
-      Answers: {{ AnswersCount }} / {{ quizzes.length }}
-      Lesson progress: {{ progress }}%
+      </v-col>
+      </v-row>
+
+
     </div>
 
   </div>

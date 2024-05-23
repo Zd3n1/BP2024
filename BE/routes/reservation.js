@@ -3,39 +3,39 @@ const router = express.Router();
 const reservationService = require("../service/reservation-service");
 const { isBefore } = require("date-fns");
 
-// const ORDER = {
-//   TIME: "time",
-//   DURATION: "duration",
-// };
-//
-// router.get("/", async (req, res) => {
-//   const order = req.query.order;
-//
-//   const reservationsCopy = await reservationService.getAll();
-//
-//   let reservations;
-//   if (order === ORDER.DURATION) {
-//     reservations = reservationsCopy.sort((resA, resB) =>
-//       resA.duration - resB.duration > 0 ? 0 : -1
-//     );
-//   } else {
-//     reservations = reservationsCopy.sort((resA, resB) =>
-//       isBefore(new Date(resA.time), new Date(resB.time)) ? -1 : 0
-//     );
-//   }
-//
-//   res.json(reservations);
-// });
+const ORDER = {
+  TIME: "time",
+  DURATION: "duration",
+};
 
 router.get("/", async (req, res) => {
-  try {
-    const reservations = await reservationService.getAll();
-    res.json(reservations);
-  } catch (error) {
-    console.error("Failed to load reservations:", error);
-    res.status(500).json({ error: "Failed to load reservations" });
+  const order = req.query.order;
+
+  const reservationsCopy = await reservationService.getAll();
+
+  let reservations;
+  if (order === ORDER.DURATION) {
+    reservations = reservationsCopy.sort((resA, resB) =>
+      resA.duration - resB.duration > 0 ? 0 : -1
+    );
+  } else {
+    reservations = reservationsCopy.sort((resA, resB) =>
+      isBefore(new Date(resA.time), new Date(resB.time)) ? -1 : 0
+    );
   }
+
+  res.json(reservations);
 });
+
+// router.get("/", async (req, res) => {
+//   try {
+//     const reservations = await reservationService.getAll();
+//     res.json(reservations);
+//   } catch (error) {
+//     console.error("Failed to load reservations:", error);
+//     res.status(500).json({ error: "Failed to load reservations" });
+//   }
+// });
 
 
 router.post("/", async (req, res) => {

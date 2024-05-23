@@ -76,7 +76,6 @@ export default {
       required: true,
     },
   },
-
   data() {
     return {
       formValid: true,
@@ -84,11 +83,11 @@ export default {
         time: "",
         duration: "00:00",
         description: "",
+        // octo_pw: ""
       },
       sliderValue: 0,
     };
   },
-
   computed: {
     ...mapStores(useUserStore),
     formattedDuration() {
@@ -115,11 +114,47 @@ export default {
     },
 
     onClick() {
+
+      // this.reservation.octo_pw = this.generateRandomPassword();
+      // const username = this.userStore.user.username;
+      //
+      //   await this.createOctoPrintUser(username, this.reservation.octo_pw);
+
       this.$emit("add", {
         ...this.reservation,
         user_id: this.userStore.user.id,
       });
     },
+
+    // async createOctoPrintUser(username, password) {
+    //   const url = `http://${config.server}/api/users`;
+    //   const config1 = {
+    //     headers: {
+    //       'X-Api-Key': config.apiKey,
+    //       'Content-Type': 'application/json'
+    //     }
+    //   };
+    //   const data = {
+    //     username: username,
+    //     password: password,
+    //     active: false,
+    //     roles: ['student']
+    //   };
+    //
+    //   try {
+    //     const response = await axios.post(url, data, config1);
+    //     return response.data;
+    //   } catch (error) {
+    //     console.error('Error creating OctoPrint user:', error);
+    //     throw new Error('Failed to create user');
+    //   }
+    // },
+    // generateRandomPassword() {
+    //   return Math.random().toString(36).slice(-8);
+    // },
+
+
+
   },
 };
 </script>

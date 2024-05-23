@@ -62,6 +62,7 @@ export default {
 
   created() {
     this.teacherStore.loadAll();
+    this.userStore.isBonusFormShown = false;
   },
 
   computed: {

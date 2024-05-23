@@ -32,12 +32,28 @@
 
   <v-row v-else>
     <v-col cols="12">
+      <v-row>
+        <v-radio-group
+            v-model="order"
+            row @input="handleRadioChange"
+            color="primary">
+          <v-radio label="Duration" value="duration"></v-radio>
+          <v-radio label="Time" value="time"></v-radio>
+        </v-radio-group>
+      </v-row>
+
 <!--      <v-row>-->
-<!--        <v-radio-group v-model="order" row @input="handleRadioChange">-->
-<!--          <v-radio label="Time" value="time"></v-radio>-->
-<!--          <v-radio label="Duration" value="duration"></v-radio>-->
-<!--        </v-radio-group>-->
+<!--        <v-col cols="12" md="4">-->
+<!--          <v-select-->
+<!--              v-model="order"-->
+<!--              :items="selectItems"-->
+<!--              label="Order By"-->
+<!--              color="primary"-->
+<!--              @change="handleSelectChange"-->
+<!--          ></v-select>-->
+<!--        </v-col>-->
 <!--      </v-row>-->
+
       <v-row>
         <v-col
             cols="4"
@@ -64,6 +80,7 @@
               Duration: {{ formatDuration(intervalToDuration({start: new Date(0), end: new Date(reservation.duration * 1000)})) }}
               <br>
               {{ reservation.description.length > 30 ? reservation.description.substr(0, 30) + "..." : reservation.description }}
+<!--              Password: {{reservation.octo_pw}}-->
             </v-card-text>
 
 <!--            <div v-if="reservationStore.isEditing && reservationStore.editingReservationId === reservation.id">-->
@@ -136,6 +153,10 @@ export default {
   data() {
     return {
       order: "time",
+      // selectItems: [
+      //   { text: "Time", value: "time" },
+      //   { text: "Duration", value: "duration" }
+      // ],
       format,
       formatDuration,
       intervalToDuration,
@@ -155,6 +176,7 @@ export default {
     hideForm() {
       this.reservationStore.isReservationFormShown = false;
     },
+
     addReservation(reservation) {
       const duration = reservation.duration.split(":");
       const durationInSeconds =
@@ -163,6 +185,13 @@ export default {
         ...reservation,
         duration: durationInSeconds,
       };
+
+      // if (this.reservationStore.checkTimeConflict(reservationFormatted)) {
+      //   this.reservationStore.error = 'The selected time is already taken.';
+      //   return;
+      // }
+
+
       this.reservationStore.create(reservationFormatted);
       this.reservationStore.reservations.push(reservationFormatted);
       this.reservationStore.isReservationFormShown = false;
@@ -172,6 +201,8 @@ export default {
     //   this.reservationStore.delete(id);
     //   this.reservationStore.loadAll();
     // },
+
+
 
     async deleteReservation(id) {
       try {
@@ -187,6 +218,17 @@ export default {
       }
     },
 
+    // checkTimeConflict(newReservation) {
+    //   const newStartTime = new Date(newReservation.time);
+    //   const newEndTime = new Date(newStartTime.getTime() + newReservation.duration * 1000);
+    //
+    //   return this.reservations.some(reservation => {
+    //     const startTime = new Date(reservation.time);
+    //     const endTime = new Date(startTime.getTime() + reservation.duration * 1000);
+    //     return (newStartTime < endTime && newEndTime > startTime);
+    //   });
+    // },
+
     handleRadioChange(event) {
       this.reservationStore.isLoading = true;
       this.reservationStore.loadAll(event.target.value);
@@ -194,7 +236,51 @@ export default {
     },
     // not currently used, could delete this method
 
-  },
+
+
+
+
+
+    // async activateOctoPrintUser(username) {
+    //   const url = `http://${config.server}/api/users/${username}`;
+    //   const config1 = {
+    //     headers: {
+    //       'X-Api-Key': config.apiKey,
+    //       'Content-Type': 'application/json'
+    //     }
+    //   };
+    //   const data = { active: true };
+    //
+    //   try {
+    //     const response = await axios.patch(url, data, config1);
+    //     return response.data;
+    //   } catch (error) {
+    //     console.error('Error activating OctoPrint user:', error);
+    //     throw new Error('Failed to activate user');
+    //   }
+    // },
+    //
+    // async deactivateOctoPrintUser(username) {
+    //   const url = `http://${config.server}/api/users/${username}`;
+    //   const config1 = {
+    //     headers: {
+    //       'X-Api-Key': config.apiKey,
+    //       'Content-Type': 'application/json'
+    //     }
+    //   };
+    //   const data = { active: false };
+    //
+    //   try {
+    //     const response = await axios.patch(url, data, config1);
+    //     return response.data;
+    //   } catch (error) {
+    //     console.error('Error deactivating OctoPrint user:', error);
+    //     throw new Error('Failed to deactivate user');
+    //   }
+    // },
+
+
+  }
 };
 </script>
 

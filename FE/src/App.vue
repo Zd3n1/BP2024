@@ -10,17 +10,12 @@
 
 <!--      {{ userStore.user }}-->
 <!--      {{ UserRole }}-->
-
+      <v-toolbar-items class="hidden-sm-and-down">
       <v-btn :to="{ name: 'home' }">Home</v-btn>
       <v-btn :to="{ name: 'reservations' }">Reservations</v-btn>
       <v-btn :to="{ name: 'lesson' }">Lessons</v-btn>
 <!--      <v-btn :to="{ name: 'courses' }">Courses</v-btn>-->
       <v-btn :to="{ name: 'leaderboard' }">Leaderboard</v-btn>
-
-
-
-
-
             <v-btn v-if="UserRole === 'teacher' " :to="{ name: 'teacher' }">Teacher</v-btn>
             <v-btn v-show="UserRole === 'admin' " :to="{ name: 'admin' }">Admin</v-btn>
 
@@ -29,6 +24,11 @@
 
 
 <!--      <v-btn :to="{ name: 'printer' }">Tiskárna</v-btn>-->
+      </v-toolbar-items>
+
+      <v-btn icon @click="drawer = !drawer" class="hidden-md-and-up">
+        <v-icon>mdi-menu</v-icon>
+      </v-btn>
 
       <v-menu anchor="bottom end" v-model="userMenuShown">
         <template v-slot:activator="{ props }">
@@ -90,6 +90,19 @@
 
     </v-app-bar>
 
+
+
+    <v-navigation-drawer v-model="drawer" app temporary>
+      <v-list>
+        <v-list-item :to="{ name: 'home' }">Home</v-list-item>
+        <v-list-item :to="{ name: 'reservations' }">Reservations</v-list-item>
+        <v-list-item :to="{ name: 'lesson' }">Lessons</v-list-item>
+        <v-list-item :to="{ name: 'leaderboard' }">Leaderboard</v-list-item>
+        <v-list-item v-if="UserRole === 'teacher'" :to="{ name: 'teacher' }">Teacher</v-list-item>
+        <v-list-item v-if="UserRole === 'admin'" :to="{ name: 'admin' }">Admin</v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+
     <v-main>
       <v-container>
         <router-view />
@@ -117,6 +130,7 @@ export default {
       // server: '192.168.0.178',
       // apiKey: '9D921B1F7A2448E59A10A17EB7834010',
       dialog: false,
+      drawer: false,
     };
   },
 
